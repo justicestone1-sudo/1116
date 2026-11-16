@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>비교 우위 문제 (6문항) | 통합사회 국제 분업과 무역</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --ink:#0f172a; --muted:#475569; --bg:#f1f5f9; --card:#fff; --line:#cbd5e1;
+    --ok:#15803d; --okbg:#dcfce7; --bad:#b91c1c; --badbg:#fee2e2;
+    --accent:#6d28d9; --accentbg:#ede9fe; --pick:#1d4ed8; --pickbg:#dbeafe;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    font-size:clamp(17px,0.55vw + 14px,22px); line-height:1.65; color:var(--ink); background:var(--bg); word-break:keep-all}
+  button{font:inherit; cursor:pointer}
+  header{position:sticky; top:0; z-index:10; background:#0f172a; color:#fff; padding:10px 18px;
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  header h1{margin:0; font-size:clamp(18px,1vw + 12px,26px); flex:1; min-width:200px}
+  .status{background:#334155; border-radius:999px; padding:4px 14px; font-variant-numeric:tabular-nums}
+  .hbtn{background:#334155; color:#fff; border:0; border-radius:10px; padding:6px 12px}
+  .hbtn:hover{background:#475569}
+  main{max-width:1000px; margin:0 auto; padding:18px 16px 60px}
+  h2{font-size:clamp(24px,1.2vw + 18px,34px); margin:.3em 0}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 20px; margin:14px 0}
+  .intro{border-left:8px solid var(--accent)}
+  .q{background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px 20px; margin:16px 0}
+  .q.correct{border:3px solid var(--ok)}
+  .q.incorrect{border:3px solid var(--bad)}
+  .qhead{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:6px}
+  .num{background:var(--ink); color:#fff; border-radius:8px; padding:0 10px; font-weight:800}
+  .type{background:var(--accentbg); color:var(--accent); border-radius:999px; padding:0 10px; font-size:.8em; font-weight:700}
+  .mark{font-weight:800; margin-left:auto}
+  .stem{font-weight:700}
+  .data{border:2px solid var(--line); border-radius:12px; padding:10px 14px; margin:10px 0; background:#f8fafc}
+  .data p{margin:0 0 8px}
+  table{border-collapse:collapse; width:100%; background:#fff; font-variant-numeric:tabular-nums}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:center}
+  th{background:#e2e8f0}
+  .box{border:2px solid var(--line); border-radius:10px; padding:8px 14px; margin:8px 0; background:#f8fafc}
+  .opts{display:grid; gap:8px; margin-top:10px}
+  .opt{text-align:left; background:#f8fafc; border:2px solid var(--line); border-radius:12px; padding:8px 14px}
+  .opt:hover:not(:disabled){border-color:var(--pick)}
+  .opt:disabled{cursor:default; color:inherit}
+  .opt.picked{background:var(--pickbg); border-color:var(--pick); font-weight:700}
+  .opt.right{background:var(--okbg); border-color:var(--ok)}
+  .opt.wrong{background:var(--badbg); border-color:var(--bad)}
+  .opt .tag{font-size:.8em; font-weight:800; margin-left:6px}
+  .answer{margin-top:12px; padding:12px 16px; background:var(--okbg); border-radius:12px}
+  .answer ol{margin:6px 0 0; padding-left:1.3em}
+  .hidden{display:none!important}
+  .submit{display:block; width:100%; margin:20px 0; padding:14px; border:0; border-radius:14px;
+    background:var(--accent); color:#fff; font-weight:800; font-size:1.1em}
+  .submit:disabled{background:#94a3b8; cursor:default}
+  .tipgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:10px}
+  .tipgrid > div{background:var(--accentbg); border-radius:12px; padding:12px 14px}
+  .tipgrid b.t{display:block; color:var(--accent)}
+  .ok{color:var(--ok)} .bad{color:var(--bad)}
+
+  /* 계산 연습장 */
+  .padBtn{margin-top:10px; background:#fff; border:2px solid var(--pick); color:var(--pick); border-radius:12px; padding:5px 14px; font-weight:700}
+  .pad{margin-top:10px; border:2px solid var(--pick); border-radius:12px; overflow:hidden; background:#fff}
+  .tools{display:flex; flex-wrap:wrap; gap:6px; padding:8px; background:var(--pickbg); align-items:center}
+  .tools button{background:#fff; border:2px solid var(--line); border-radius:10px; padding:4px 10px; font-size:.85em}
+  .tools button.on{border-color:var(--ink); font-weight:800; box-shadow:0 0 0 2px var(--ink) inset}
+  .tools .sp{flex:1}
+  .pad canvas{display:block; width:100%; height:340px; touch-action:none; cursor:crosshair;
+    background-image:linear-gradient(#e2e8f0 1px, transparent 1px); background-size:100% 34px}
+  .padHint{font-size:.75em; color:var(--muted); padding:4px 10px}
+  footer{font-size:.8em; color:var(--muted); text-align:center; margin-top:30px}
+  @media (max-width:600px){ th,td{padding:6px 4px} .q,.card{padding:14px} }
+  @media print{ header,.submit{display:none!important} .q{break-inside:avoid} }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚖️ 비교 우위 문제 (6문항)</h1>
+  <span class="status" id="status">선택 0 / 6</span>
+  <button class="hbtn hidden" id="teacherBtn" title="채점 없이 정답·풀이 공개">👩‍🏫 정답 공개</button>
+  <button class="hbtn hidden" id="resetBtn">↺ 다시 풀기</button>
+</header>
+
+<main>
+  <div class="card intro">
+    <b>📝 안내</b> 6문항을 모두 푼 뒤 맨 아래 <b>[채점하기]</b>를 누르세요. 채점 전에는 답을 몇 번이든 바꿀 수 있고, <b>정답과 풀이는 채점 후에 공개</b>됩니다.<br>
+    <span style="color:var(--muted);font-size:.9em">공통 조건: 갑국과 을국은 노동만을 사용하여 X재와 Y재만을 생산하며, 비교 우위가 있는 재화만 생산하여 거래 비용 없이 양국 간에만 교역한다.</span>
+  </div>
+
+  <div id="quiz"></div>
+  <button class="submit" id="submitBtn" disabled>채점하기 (6문항을 모두 선택하세요)</button>
+
+  <div id="after" class="hidden">
+    <div class="card" id="result"></div>
+    <div class="card">
+      <b style="color:var(--accent)">📌 정리 — 자료 유형별 기회비용 계산법</b>
+      <div class="tipgrid">
+        <div><b class="t">생산량 표 (하루 최대 생산량)</b>X재 1단위의 기회비용 = <b>Y 생산량 ÷ X 생산량</b><br>→ 구하려는 재화가 <b>분모</b></div>
+        <div><b class="t">생산비 표 (1단위 생산에 필요한 노동자 수·시간)</b>X재 1단위의 기회비용 = <b>X 투입량 ÷ Y 투입량</b><br>→ 구하려는 재화가 <b>분자</b></div>
+        <div><b class="t">단위 표시</b>X재의 기회비용은 <b>Y재</b>로, Y재의 기회비용은 <b>X재</b>로 표시. 한 나라 안의 두 기회비용은 <b>역수</b></div>
+        <div><b class="t">판단 기준</b>절대 우위: 생산량이 많거나 투입량이 적은 나라<br>비교 우위: <b>기회비용이 작은</b> 나라</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>EBS 『개념완성 통합사회 2』 문항 유형을 참고하여 숫자를 바꿔 새로 만든 연습 문항입니다. 갑국·을국은 가상의 나라입니다.<br>이 자료는 학생 정보를 수집하지 않습니다.</footer>
+</main>
+
+<script>
+/* =========================================================
+   문항 데이터 — 고치거나 바꾸려면 QUIZ 배열만 수정하세요.
+   ans: 정답 번호(0부터 시작, 0 = ①), steps: 채점 후 공개되는 풀이
+   교사용: 주소 끝에 ?teacher 를 붙여 열면 [정답 공개] 버튼이 나타남
+   ========================================================= */
+const QTY = (a, b, c, d, cap, head = ['X재', 'Y재']) => `<p>표는 ${cap}</p>
+  <table><tr><th>구분</th><th>${head[0]}</th><th>${head[1]}</th></tr>
+  <tr><td>갑국</td><td>${a}</td><td>${b}</td></tr><tr><td>을국</td><td>${c}</td><td>${d}</td></tr></table>`;
+const QTY_CAP = '양국이 같은 양의 노동으로 하루 동안 각 재화만 생산할 때의 최대 생산량을 나타낸다.';
+const PROD = (a, b, c, d) => QTY(a, b, c, d, '갑국과 을국이 같은 양의 노동으로 <b>하루 동안 생산할 수 있는 최대 생산량</b>을 나타낸다.', ['X재 최대 생산량', 'Y재 최대 생산량']);
+
+const QUIZ = [
+  // ---------------- 생산량 표 ----------------
+  { type: '생산량 표',
+    stem: '다음은 갑국과 을국의 하루 최대 생산량이다. 이에 대한 분석으로 옳은 것은?',
+    data: PROD('20개', '10개', '12개', '18개'),
+    opts: ['갑국의 X재 1단위 생산의 기회비용은 Y재 2단위이다.',
+           '을국은 Y재 생산에 절대 우위와 비교 우위를 모두 가진다.',
+           '갑국은 두 재화 생산 모두에 절대 우위를 가진다.',
+           '을국의 X재 1단위 생산의 기회비용은 Y재 1/2단위이다.',
+           '양국이 교역할 경우 갑국은 Y재를 수출할 것이다.'],
+    ans: 1,
+    steps: ['생산량 표 → X재 기회비용 = Y 생산량 ÷ X 생산량',
+            '갑국 X재: 10÷20 = Y재 1/2단위, 을국 X재: 18÷12 = Y재 3/2단위 → 갑국이 X재에 비교 우위 (①④ 틀림)',
+            'Y재 기회비용은 역수: 갑국 X재 2단위, 을국 X재 2/3단위 → 을국이 Y재에 비교 우위',
+            '절대 우위: X재는 갑국(20>12), Y재는 을국(18>10) → ③ 틀림',
+            '을국은 Y재에 절대 우위와 비교 우위를 모두 가짐 → ② 정답. ⑤ 갑국은 X재를 수출'] },
+
+  { type: '생산량 표',
+    stem: '다음은 갑국과 을국의 하루 최대 생산량이다. 이에 대한 옳은 분석만을 〈보기〉에서 고른 것은?',
+    data: PROD('30개', '15개', '9개', '12개'),
+    box: 'ㄱ. 갑국은 두 재화 생산 모두에 절대 우위를 가진다.<br>ㄴ. 을국의 Y재 1단위 생산의 기회비용은 X재 3/4단위이다.<br>ㄷ. 갑국은 Y재 생산에 비교 우위를 가진다.<br>ㄹ. X재 1단위와 Y재 2단위를 교환하면 양국 모두 무역의 이익을 얻는다.',
+    opts: ['ㄱ, ㄴ', 'ㄱ, ㄷ', 'ㄴ, ㄷ', 'ㄴ, ㄹ', 'ㄷ, ㄹ'],
+    ans: 0,
+    steps: ['ㄱ. 갑국이 X재(30>9), Y재(15>12) 모두 많이 생산 → 옳음',
+            'ㄴ. 을국 Y재 기회비용 = 9÷12 = X재 3/4단위 → 옳음',
+            'ㄷ. Y재 기회비용: 갑국 X재 2단위(30÷15), 을국 X재 3/4단위 → 을국이 Y재에 비교 우위 → 틀림',
+            'ㄹ. X재 기회비용은 갑국 Y재 1/2단위, 을국 Y재 4/3단위(12÷9) → X재 1단위와 교환되는 Y재는 1/2단위보다 많고 4/3단위보다 적어야 함. Y재 2단위는 범위 밖 → 틀림'] },
+
+  // ---------------- 생산비 표 ----------------
+  { type: '생산비 표',
+    stem: '다음 자료에 대한 분석 및 추론으로 옳은 것은?',
+    data: QTY('2명', '4명', '6명', '8명', '갑국과 을국이 X재와 Y재 1단위를 생산하는 데 필요한 노동자 수를 나타낸다.'),
+    opts: ['을국은 두 재화 생산 모두에 절대 우위를 가진다.',
+           '갑국의 Y재 1단위 생산의 기회비용은 X재 1/2단위이다.',
+           '을국의 Y재 1단위 생산의 기회비용은 X재 4/3단위이다.',
+           '갑국은 두 재화 생산 모두에 비교 우위를 가진다.',
+           '양국이 교역할 경우 을국은 X재를 수출할 것이다.'],
+    ans: 2,
+    steps: ['생산비 표 → X재 기회비용 = X 투입 ÷ Y 투입 (구하려는 재화가 분자)',
+            '절대 우위: 필요한 노동자가 적은 갑국이 두 재화 모두 절대 우위 → ① 틀림',
+            '갑국 Y재 기회비용 = 4÷2 = X재 2단위 → ② 틀림',
+            '을국 Y재 기회비용 = 8÷6 = X재 4/3단위 → ③ 정답',
+            'X재 기회비용: 갑국 Y재 1/2단위 < 을국 Y재 3/4단위 → 갑국 X재, 을국 Y재에 비교 우위 → ④⑤ 틀림'] },
+
+  { type: '생산비 표',
+    stem: '다음 자료에서 을국의 X재 1단위 생산의 기회비용은?',
+    data: QTY('12시간', '4시간', '9시간', '6시간', '갑국과 을국이 X재와 Y재 1단위를 생산하는 데 필요한 노동 시간을 나타낸다.'),
+    opts: ['Y재 2/3단위', 'Y재 3/2단위', 'Y재 3단위', 'Y재 1/3단위', 'Y재 9단위'],
+    ans: 1,
+    steps: ['생산비 표 → X재 기회비용 = X 투입 ÷ Y 투입',
+            '을국: 9시간 ÷ 6시간 = Y재 3/2단위',
+            '⚠ 생산량 표처럼 Y÷X로 계산하면 ① 2/3단위가 나오는 함정. ③ 3단위는 갑국(12÷4) 값'] },
+
+  // ---------------- 단위 계산 ----------------
+  { type: '단위 계산',
+    stem: '다음 표의 (가), (나)에 들어갈 내용으로 옳은 것은?',
+    data: `<p>표는 갑국과 을국이 X재 또는 Y재 1단위를 생산할 때의 기회비용을 나타낸다.</p>
+      <table><tr><th>구분</th><th>갑국</th><th>을국</th></tr>
+      <tr><td>X재 1단위 생산의 기회비용</td><td>Y재 5/2단위</td><td>(나)</td></tr>
+      <tr><td>Y재 1단위 생산의 기회비용</td><td>(가)</td><td>X재 3/4단위</td></tr></table>`,
+    opts: ['(가) X재 2/5단위, (나) Y재 4/3단위',
+           '(가) X재 5/2단위, (나) Y재 3/4단위',
+           '(가) X재 2/5단위, (나) Y재 3/4단위',
+           '(가) Y재 2/5단위, (나) X재 4/3단위',
+           '(가) X재 5/2단위, (나) Y재 4/3단위'],
+    ans: 0,
+    steps: ['한 나라 안에서 두 재화의 기회비용은 역수',
+            '(가): 갑국 X재 기회비용 Y재 5/2단위의 역수 → X재 2/5단위',
+            '(나): 을국 Y재 기회비용 X재 3/4단위의 역수 → Y재 4/3단위',
+            '⚠ ④는 숫자는 맞지만 재화 단위가 바뀐 함정. Y재의 기회비용은 X재로, X재의 기회비용은 Y재로 표시'] },
+
+  { type: '단위 계산',
+    stem: '다음 자료에 대한 분석으로 옳은 것은?',
+    data: QTY('9단위', '6단위', '4단위', '8단위', QTY_CAP),
+    opts: ['갑국의 X재 1단위 생산의 기회비용은 X재 2/3단위이다.',
+           '을국의 X재 1단위 생산의 기회비용은 Y재 2단위이다.',
+           '갑국의 Y재 1단위 생산의 기회비용은 Y재 3/2단위이다.',
+           '을국의 Y재 1단위 생산의 기회비용은 X재 2단위이다.',
+           '갑국의 X재 1단위 생산의 기회비용은 Y재 3/2단위이다.'],
+    ans: 1,
+    steps: ['X재 기회비용(Y재로 표시): 갑국 6÷9 = Y재 2/3단위, 을국 8÷4 = Y재 2단위 → ② 정답',
+            'Y재 기회비용(X재로 표시): 갑국 9÷6 = X재 3/2단위, 을국 4÷8 = X재 1/2단위',
+            '①③ 기회비용을 자기 재화로 표시한 단위 오류 / ④ 을국 Y재는 X재 1/2단위 / ⑤ 갑국 X재는 Y재 2/3단위'] }
+];
+
+/* ================= 계산 연습장 (캔버스 필기) ================= */
+const pads = [];
+function makePad(wrap) {
+  const cv = wrap.querySelector('canvas'), ctx = cv.getContext('2d');
+  const strokes = [];               // 획 목록 (되돌리기·화면 크기 변경 시 다시 그리기용)
+  let cur = null, color = '#0f172a', erase = false, penSeen = false;
+
+  function resize() {
+    const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+    if (!w) return;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    redraw();
+  }
+  function drawSeg(st, a, b) {
+    ctx.globalCompositeOperation = st.erase ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = st.color; ctx.lineCap = ctx.lineJoin = 'round';
+    ctx.lineWidth = st.erase ? 28 : 1.2 + 2.6 * (b[2] || 0.5);   // 펜슬 압력 반영
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  }
+  function redraw() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    strokes.forEach(st => { for (let k = 1; k < st.pts.length; k++) drawSeg(st, st.pts[k - 1], st.pts[k]); if (st.pts.length === 1) drawSeg(st, st.pts[0], st.pts[0]); });
+  }
+  const pt = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top, e.pressure]; };
+  cv.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'pen') penSeen = true;
+    if (penSeen && e.pointerType === 'touch') return;   // 손바닥 무시
+    e.preventDefault(); cv.setPointerCapture(e.pointerId);
+    cur = { color, erase, pts: [pt(e)] }; strokes.push(cur); drawSeg(cur, cur.pts[0], cur.pts[0]);
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!cur) return;
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    (evs.length ? evs : [e]).forEach(ev => { const p = pt(ev); drawSeg(cur, cur.pts[cur.pts.length - 1], p); cur.pts.push(p); });
+  });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => cv.addEventListener(t, () => { cur = null; }));
+
+  wrap.querySelectorAll('.tools button').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.act === 'undo') { strokes.pop(); redraw(); return; }
+    if (b.dataset.act === 'clear') { strokes.length = 0; redraw(); return; }
+    wrap.querySelectorAll('.tools button[data-c], .tools button[data-tool]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    erase = b.dataset.tool === 'erase'; if (!erase) color = b.dataset.c;
+  }));
+  const pad = { resize };
+  pads.push(pad);
+  return pad;
+}
+window.addEventListener('resize', () => pads.forEach(p => p.resize()));
+
+/* ================= 동작 ================= */
+const circled = ['①', '②', '③', '④', '⑤'];
+let picks = QUIZ.map(() => null);
+let graded = false;
+
+function render() {
+  document.getElementById('quiz').innerHTML = QUIZ.map((q, i) => `
+    <div class="q" data-i="${i}">
+      <div class="qhead"><span class="num">${i + 1}</span><span class="type">${q.type} 문제</span><span class="mark"></span></div>
+      <div class="stem">${q.stem}</div>
+      ${q.data ? `<div class="data">${q.data}</div>` : ''}
+      ${q.box ? `<div class="box"><b>〈보기〉</b><br>${q.box}</div>` : ''}
+      <div class="opts">${q.opts.map((o, j) => `<button class="opt" data-j="${j}">${circled[j]} ${o}</button>`).join('')}</div>
+      <button class="padBtn">✏️ 계산 연습장 열기</button>
+      <div class="pad hidden">
+        <div class="tools">
+          <button data-c="#0f172a" class="on">✒️ 검정</button><button data-c="#1d4ed8">🔵 파랑</button><button data-c="#dc2626">🔴 빨강</button>
+          <button data-tool="erase">🧽 지우개</button><span class="sp"></span>
+          <button data-act="undo">↶ 되돌리기</button><button data-act="clear">🗑 모두 지우기</button>
+        </div>
+        <canvas></canvas>
+        <div class="padHint">펜슬·손가락·마우스로 쓸 수 있어요. 펜슬로 쓰기 시작하면 손바닥 터치는 무시됩니다. (연습장 내용은 저장되지 않음)</div>
+      </div>
+      <div class="answer hidden"><b>정답 ${circled[q.ans]}</b><ol>${q.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
+    </div>`).join('');
+  document.querySelectorAll('.q').forEach(box => {
+    const btn = box.querySelector('.padBtn'), wrap = box.querySelector('.pad');
+    let pad = null;
+    btn.addEventListener('click', () => {
+      const open = wrap.classList.toggle('hidden') === false;
+      btn.textContent = open ? '✏️ 계산 연습장 닫기' : '✏️ 계산 연습장 열기';
+      if (open) { if (!pad) pad = makePad(wrap); pad.resize(); }
+    });
+  });
+  document.querySelectorAll('.q').forEach(box => {
+    const i = +box.dataset.i;
+    box.querySelectorAll('.opt').forEach(btn => btn.addEventListener('click', () => {
+      if (graded) return;
+      picks[i] = +btn.dataset.j;
+      box.querySelectorAll('.opt').forEach(b => b.classList.toggle('picked', b === btn));
+      updateStatus();
+    }));
+  });
+}
+
+function updateStatus() {
+  const n = picks.filter(p => p !== null).length;
+  const sub = document.getElementById('submitBtn');
+  if (graded) return;
+  document.getElementById('status').textContent = `선택 ${n} / ${QUIZ.length}`;
+  sub.disabled = n < QUIZ.length;
+  sub.textContent = n < QUIZ.length ? `채점하기 (${QUIZ.length - n}문항 남음)` : '채점하기';
+}
+
+// 정답·풀이 공개. withScore=false 이면 교사용(채점 없이 공개)
+function reveal(withScore) {
+  graded = true;
+  let score = 0;
+  document.querySelectorAll('.q').forEach(box => {
+    const i = +box.dataset.i, q = QUIZ[i], p = picks[i];
+    const right = p === q.ans; if (right) score++;
+    box.querySelectorAll('.opt').forEach(b => {
+      const j = +b.dataset.j; b.disabled = true; b.classList.remove('picked');
+      if (j === q.ans) { b.classList.add('right'); b.insertAdjacentHTML('beforeend', '<span class="tag ok">✔ 정답</span>'); }
+      if (withScore && j === p && !right) { b.classList.add('wrong'); b.insertAdjacentHTML('beforeend', '<span class="tag bad">✘ 내 답</span>'); }
+    });
+    if (withScore) {
+      box.classList.add(right ? 'correct' : 'incorrect');
+      box.querySelector('.mark').innerHTML = right ? '<span class="ok">⭕ 정답</span>' : '<span class="bad">❌ 오답</span>';
+    }
+    box.querySelector('.answer').classList.remove('hidden');
+  });
+  document.getElementById('submitBtn').classList.add('hidden');
+  document.getElementById('resetBtn').classList.remove('hidden');
+  document.getElementById('after').classList.remove('hidden');
+  const res = document.getElementById('result');
+  if (withScore) {
+    document.getElementById('status').textContent = `점수 ${score} / ${QUIZ.length}`;
+    const wrongTypes = [...new Set(QUIZ.filter((q, i) => picks[i] !== q.ans).map(q => q.type))];
+    res.innerHTML = `<h2>🏁 결과: ${score} / ${QUIZ.length}</h2>` +
+      (wrongTypes.length ? `틀린 문항의 풀이를 확인하세요. 다시 볼 유형: <b>${wrongTypes.join(', ')}</b>` : '모두 맞혔습니다! 👏') +
+      `<br><span style="color:var(--muted);font-size:.9em">틀린 문항: ${QUIZ.map((q, i) => picks[i] !== q.ans ? (i + 1) + '번' : '').filter(Boolean).join(', ') || '없음'}</span>`;
+  } else {
+    document.getElementById('status').textContent = '정답 공개 (교사용)';
+    res.innerHTML = '<h2>👩‍🏫 정답·풀이 공개</h2>';
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('submitBtn').addEventListener('click', () => reveal(true));
+document.getElementById('teacherBtn').addEventListener('click', () => { if (!graded) reveal(false); });
+document.getElementById('resetBtn').addEventListener('click', () => {
+  picks = QUIZ.map(() => null); graded = false;
+  document.getElementById('submitBtn').classList.remove('hidden');
+  document.getElementById('resetBtn').classList.add('hidden');
+  document.getElementById('after').classList.add('hidden');
+  pads.length = 0; render(); updateStatus(); window.scrollTo(0, 0);
+});
+if (new URLSearchParams(location.search).has('teacher')) document.getElementById('teacherBtn').classList.remove('hidden');
+
+render(); updateStatus();
+</script>
+</body>
+</html>
